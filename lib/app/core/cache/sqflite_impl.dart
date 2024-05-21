@@ -12,8 +12,6 @@ class SqfliteImpl implements Cache {
     bool exists = await databaseExists("dictionary_db");
 
     if (!exists) {
-      print('O banco de dados está sendo criado.');
-
       _database = await openDatabase("dictionary_db", onCreate: (db, version) {
         db.execute(
           'CREATE TABLE works('
@@ -24,7 +22,6 @@ class SqfliteImpl implements Cache {
       }, version: 1);
     }
 
-    print('O banco de dados já existe');
     _database = await openDatabase("dictionary_db");
   }
 
