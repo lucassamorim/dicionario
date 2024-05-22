@@ -1,7 +1,6 @@
+import 'package:dicionario/app/core/cache/sqflite_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
-
-import '../../core/cache/sqflite_impl.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -12,12 +11,11 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   TextEditingController textFormController = TextEditingController();
-
-  late SqfliteImpl cache;
+  TextEditingController idFormController = TextEditingController();
 
   @override
   void initState() {
-    cache = SqfliteImpl();
+    //cache.removeDB();
     super.initState();
   }
 
@@ -36,11 +34,21 @@ class _SplashPageState extends State<SplashPage> {
               InkWell(
                 child: const Text('Salvar'),
                 onTap: () async {
-                  await cache.insert('works',
-                      {'script': textFormController.text, 'favorite': 1});
+                  // await cache.insert('works',
+                  //     {'script': textFormController.text, 'favorite': 1});
                 },
               ),
-              const SizedBox(height: 100),
+              TextFormField(
+                controller: idFormController,
+              ),
+              InkWell(
+                child: const Text('Salvar alteração'),
+                onTap: () async {
+                  await SqfliteImpl().update(
+                      'works', {'name': idFormController.text}, 'id = ?', [46]);
+                },
+              ),
+              const SizedBox(height: 10),
               const FlutterLogo(size: 100),
               const SizedBox(height: 100),
               const CircularProgressIndicator(),
@@ -52,16 +60,30 @@ class _SplashPageState extends State<SplashPage> {
                   Database worksDB = await openDatabase("dictionary_db");
 
                   await worksDB
-                      .insert('words', {'word': 'Teste', 'favorite': 1});
+                      .insert('works', {'word': 'Teste', 'favorite': 1});
                   print('Dados adicionados com sucesso!');
                 },
               ),
-              SizedBox(height: 100),
+              SizedBox(height: 20),
               InkWell(
                 child: const Text('Listar informações'),
                 onTap: () async {
+                  //print(await cache.get("works", {}));
 
-                  print(await cache.get("works", {}));
+                  final testeWorks =
+                      await SqfliteImpl().get('works', 'favorite = ?', ["1"]);
+                  print(testeWorks);
+                },
+              ),
+              SizedBox(height: 20),
+              InkWell(
+                child: const Text('Adicionar registro'),
+                onTap: () async {
+                  await SqfliteImpl().insert('works', {
+                    'name': textFormController.text,
+                    'script': "Aqui vai um script",
+                    'favorite': 1,
+                  });
                 },
               ),
             ],

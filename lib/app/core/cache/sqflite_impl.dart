@@ -1,59 +1,79 @@
-import 'dart:async';
-
 import 'package:dicionario/app/core/cache/cache.dart';
+import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class SqfliteImpl implements Cache {
-   Database? _database;
+  static final SqfliteImpl _instance = SqfliteImpl._internal();
 
-  SqfliteImpl() {
-    initDB();
-    //removeDB();
+  factory SqfliteImpl() {
+    return _instance;
   }
 
-  Future removeDB() async {
-    await deleteDatabase("dictionary_db");
+  SqfliteImpl._internal();
+
+  Database? _database;
+
+  Future<Database> get database async {
+    if (_database != null) return _database!;
+    _database = await _initDatabase();
+    return _database!;
   }
 
-  Future initDB() async {
-
-    
-
-bool exists = await databaseExists("dictionary_db");
-
-if (!exists) {
-  _database = await openDatabase("dictionary_db", onCreate: (db, version) {
-    db.execute(
-      'CREATE TABLE works('
-      'id INTEGER PRIMARY KEY, '
-      'script TEXT, '
-      'favorite INTEGER)',
+  Future<Database> _initDatabase() async {
+    String path = join(await getDatabasesPath(), 'dictionary.db');
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: _onCreate,
     );
-  }, version: 1);
-}
+  }
 
-_database = await openDatabase("dictionary_db");
+  Future<void> _onCreate(Database db, int version) async {
+    await db.execute('''
+      CREATE TABLE works (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        script TEXT,
+        favorite INT
+      )
+    ''');
   }
 
   @override
-  Future<bool> delete(String table, int id) async {
-    throw UnimplementedError();
+  Future<List<Map<String, Object?>>> get(
+      String key, String where, List<Object?> whereArgs) async {
+    final db = await database;
+    return await db.query(key, where: where, whereArgs: whereArgs);
   }
 
   @override
-  Future<bool> insert(String table, Map<String, Object> query) async {
-    await _database!.insert(table, query);
+  Future<bool> insert(String key, Map<String, Object?> value) async {
+    final db = await database;
+    await db.insert(key, value);
     return true;
   }
 
   @override
-  Future<bool> update(String table, int id, Map<String, Object> query) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<bool> update(String key, Map<String, Object?> value, String where,
+      List<Object?> whereArgs) async {
+    final db = await database;
+    await db.update(
+      key,
+      value,
+      where: where,
+      whereArgs: whereArgs,
+    );
+    return true;
   }
 
   @override
-  Future<List<Map<String, Object?>>> get(String table, Map<String, Object> query) async {
-    return await _database!.query('works');
+  Future<bool> remove(String key, String where, List<Object?> whereArgs) async {
+    final db = await database;
+    await db.delete(
+      key,
+      where: where,
+      whereArgs: whereArgs,
+    );
+    return true;
   }
 }
