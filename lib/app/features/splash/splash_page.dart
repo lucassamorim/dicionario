@@ -60,9 +60,8 @@ class _SplashPageState extends State<SplashPage> {
               InkWell(
                 child: const Text('Listar informações'),
                 onTap: () async {
-                  Database worksDB = await openDatabase("dictionary_db");
 
-                  print(await worksDB.query('words'));
+                  print(await cache.get("works", {}));
                 },
               ),
             ],

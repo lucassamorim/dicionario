@@ -1,28 +1,38 @@
+import 'dart:async';
+
 import 'package:dicionario/app/core/cache/cache.dart';
 import 'package:sqflite/sqflite.dart';
 
 class SqfliteImpl implements Cache {
-  late final Database _database;
+   Database? _database;
 
   SqfliteImpl() {
-    initDb();
+    initDB();
+    //removeDB();
   }
 
-  Future initDb() async {
-    bool exists = await databaseExists("dictionary_db");
+  Future removeDB() async {
+    await deleteDatabase("dictionary_db");
+  }
 
-    if (!exists) {
-      _database = await openDatabase("dictionary_db", onCreate: (db, version) {
-        db.execute(
-          'CREATE TABLE works('
-          'id INTEGER PRIMARY KEY, '
-          'script TEXT, '
-          'favorite INTEGER)',
-        );
-      }, version: 1);
-    }
+  Future initDB() async {
 
-    _database = await openDatabase("dictionary_db");
+    
+
+bool exists = await databaseExists("dictionary_db");
+
+if (!exists) {
+  _database = await openDatabase("dictionary_db", onCreate: (db, version) {
+    db.execute(
+      'CREATE TABLE works('
+      'id INTEGER PRIMARY KEY, '
+      'script TEXT, '
+      'favorite INTEGER)',
+    );
+  }, version: 1);
+}
+
+_database = await openDatabase("dictionary_db");
   }
 
   @override
@@ -32,7 +42,7 @@ class SqfliteImpl implements Cache {
 
   @override
   Future<bool> insert(String table, Map<String, Object> query) async {
-    await _database.insert(table, query);
+    await _database!.insert(table, query);
     return true;
   }
 
@@ -43,8 +53,7 @@ class SqfliteImpl implements Cache {
   }
 
   @override
-  Future<bool> get(String table, Map<String, Object> query) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<List<Map<String, Object?>>> get(String table, Map<String, Object> query) async {
+    return await _database!.query('works');
   }
 }
