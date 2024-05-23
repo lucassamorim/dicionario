@@ -1,6 +1,7 @@
-import 'package:dicionario/app/core/cache/sqflite_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+
+import '../../core/cache/sqflite_impl.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});

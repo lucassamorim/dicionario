@@ -5,7 +5,7 @@ const _defaultInputBorder = OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(8)),
     borderSide: BorderSide.none);
 
-ThemeData get lightTheme => ThemeData(
+ThemeData lightTheme(BuildContext context) => ThemeData(
       useMaterial3: true,
       colorScheme: const ColorScheme.light(
         primary: Color(0xFF3699FF),
@@ -63,7 +63,7 @@ ThemeData get lightTheme => ThemeData(
         labelSmall:
             GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w400),
       ),
-      extensions: const <ThemeExtension<dynamic>>[
+      extensions: const [
         CustomColors(
             backgroundPrimary: Color(0xFFF9F9F9),
             backgroundSecondary: Color(0xFF090A0D),
@@ -72,7 +72,7 @@ ThemeData get lightTheme => ThemeData(
             textColor3: Color(0xFF99A1B7),
             backgroundError: Color(0xFFFFEEF3),
             backgroundSuccess: Color(0xFFDFFFEA),
-            textSuccessColor: Color(0xFF17C653)),
+            textSuccess: Color(0xFF17C653)),
       ],
     );
 
@@ -84,7 +84,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
   final Color textColor3;
   final Color backgroundSuccess;
   final Color backgroundError;
-  final Color textSuccessColor;
+  final Color textSuccess;
 
   const CustomColors({
     required this.backgroundPrimary,
@@ -94,7 +94,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
     required this.textColor3,
     required this.backgroundSuccess,
     required this.backgroundError,
-    required this.textSuccessColor,
+    required this.textSuccess,
   });
 
   @override
@@ -106,7 +106,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
     Color? textColor3,
     Color? backgroundSuccess,
     Color? backgroundError,
-    Color? textSuccessColor,
+    Color? textSuccess,
   }) {
     return CustomColors(
       backgroundPrimary: backgroundPrimary ?? this.backgroundPrimary,
@@ -116,8 +116,12 @@ class CustomColors extends ThemeExtension<CustomColors> {
       textColor3: textColor3 ?? this.textColor3,
       backgroundSuccess: backgroundSuccess ?? this.backgroundSuccess,
       backgroundError: backgroundError ?? this.backgroundError,
-      textSuccessColor: textSuccessColor ?? this.textSuccessColor,
+      textSuccess: textSuccess ?? this.textSuccess,
     );
+  }
+
+  static CustomColors of(BuildContext context) {
+    return Theme.of(context).extension<CustomColors>()!;
   }
 
   @override
@@ -134,8 +138,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
       backgroundSuccess:
           Color.lerp(backgroundSuccess, other.backgroundSuccess, t)!,
       backgroundError: Color.lerp(backgroundError, other.backgroundError, t)!,
-      textSuccessColor:
-          Color.lerp(textSuccessColor, other.textSuccessColor, t)!,
+      textSuccess: Color.lerp(textSuccess, other.textSuccess, t)!,
     );
   }
 }

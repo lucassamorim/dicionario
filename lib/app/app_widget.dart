@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'desing_system/theme/theme.dart';
-import 'features/splash/splash_page.dart';
+import 'features/home/presenter/pages/home_page.dart';
 
 class AppWidget extends StatelessWidget {
   const AppWidget({super.key});
@@ -9,8 +9,8 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: lightTheme,
-      home: const SplashPage(),
+      theme: lightTheme(context),
+      home: const HomePage(),
     );
   }
 }
