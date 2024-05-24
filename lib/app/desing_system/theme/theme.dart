@@ -14,16 +14,16 @@ ThemeData lightTheme(BuildContext context) => ThemeData(
         error: Color(0xFFF8285A),
       ),
       fontFamily: GoogleFonts.poppins().fontFamily,
-      inputDecorationTheme: const InputDecorationTheme(
+      inputDecorationTheme:  InputDecorationTheme(
           filled: true,
-          errorStyle: TextStyle(
+          errorStyle: const TextStyle(
             color: Color(0xFFF8285A),
             fontSize: 16,
             fontWeight: FontWeight.w400,
           ),
-          fillColor: Color(0xFFF9F9F9),
-          labelStyle: TextStyle(
-            color: Color(0xFF4B5675),
+          fillColor: Colors.grey[300],
+          labelStyle: const TextStyle(
+            color:  Color(0xFF4B5675),
             fontSize: 20,
             fontWeight: FontWeight.w400,
           ),
