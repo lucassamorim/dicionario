@@ -1,9 +1,21 @@
 import 'package:dio/dio.dart';
 
+import '../../constants/env.dart';
 import 'dio_adapter.dart';
 import '../http_client.dart';
 import '../rest_client_request.dart';
 import '../rest_client_response.dart';
+
+class DioFactory {
+  static Dio dio() {
+    final baseOptions = BaseOptions(
+      baseUrl: baseUrl,
+      connectTimeout: const Duration(milliseconds: connectTimeout),
+      receiveTimeout: const Duration(milliseconds: receiveTimeout),
+    );
+    return Dio(baseOptions);
+  }
+}
 
 class DioClientImpl implements Client {
   final Dio dio;

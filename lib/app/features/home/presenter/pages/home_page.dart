@@ -1,11 +1,10 @@
-
 import 'package:dicionario/app/desing_system/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../../../../core/states/base_state.dart';
 import '../../../../desing_system/alert/alerts.dart';
 import '../../../../injector.dart';
+import '../../../single_word/presenter/pages/single_word_page.dart';
 import '../../domain/entities/word_entity.dart';
 import '../stores/home_store.dart';
 
@@ -38,18 +37,44 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title:  Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-             Icon(Icons.menu_book_rounded, color: Theme.of(context).colorScheme.primary),
-            const SizedBox(width: 5),
-            Text("Dicionário", style: TextStyle(color: Theme.of(context).colorScheme.primary),),
-          ],
-        ), backgroundColor: CustomColors.of(context).backgroundSecondary,),
+        appBar: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.menu_book_rounded,
+                  color: Theme.of(context).colorScheme.primary),
+              const SizedBox(width: 5),
+              Text(
+                "Dicionário",
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              ),
+            ],
+          ),
+          backgroundColor: CustomColors.of(context).backgroundSecondary,
+        ),
         backgroundColor: CustomColors.of(context).backgroundPrimary,
         body: Column(
           children: [
-            Padding(padding: const EdgeInsets.only(left: 10, right: 10, top: 30, bottom: 20), child: TextFormField( decoration: InputDecoration(label: const Text("Digite a palavra"), suffixIcon: IconButton(onPressed: (){}, icon: const Icon(Icons.search))),),),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 10, right: 10, top: 30, bottom: 20),
+              child: TextFormField(
+                controller: store.word,
+                decoration: InputDecoration(
+                  label: const Text("Digite a palavra"),
+                  suffixIcon: IconButton(
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            SingleWordPage(word: store.word.text),
+                      ),
+                    ),
+                    icon: const Icon(Icons.search),
+                  ),
+                ),
+              ),
+            ),
             Expanded(
                 child: ValueListenableBuilder(
               valueListenable: store,
@@ -63,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   );
                 }
-      
+
                 if (state is SuccessState<List<WordEntity>>) {
                   return GridView.builder(
                       padding: const EdgeInsets.all(12.0),
@@ -77,17 +102,27 @@ class _HomePageState extends State<HomePage> {
                       itemBuilder: (BuildContext context, int index) {
                         final word = state.data[index];
                         return Container(
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Theme.of(context).colorScheme.primaryContainer,),
-                          child: Center(child: Text(word.word, style: const TextStyle(color: Colors.white),)),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color:
+                                Theme.of(context).colorScheme.primaryContainer,
+                          ),
+                          child: Center(
+                              child: Text(
+                            word.word,
+                            style: const TextStyle(color: Colors.white),
+                          )),
                         );
                       });
                 }
-      
+
                 return Container();
               },
             ))
           ],
         ),
+        bottomNavigationBar: ElevatedButton(
+            onPressed: () {}, child: const Text('Ir para a single')),
       ),
     );
   }

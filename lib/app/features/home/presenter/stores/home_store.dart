@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../core/states/base_state.dart';
 import '../../domain/repositories/home_repository.dart';
@@ -7,6 +7,8 @@ import '../../domain/entities/word_entity.dart';
 class HomeStore extends ValueNotifier<BaseState> {
   final HomeRepository repository;
   HomeStore({required this.repository}) : super(InitialState());
+
+  final word = TextEditingController();
 
   Future fetchWords() async {
     value = LoadingState();

@@ -1,0 +1,41 @@
+import 'package:either_dart/either.dart';
+
+import '../../../../core/constants/env.dart';
+import '../../../../core/errors/default_exception.dart';
+import '../../../../core/http_client/rest_client_request.dart';
+import '../../domain/entities/word_details_entity.dart';
+import '../../../../core/errors/base_exception.dart';
+import '../../../../core/http_client/http_client.dart';
+import '../../domain/repositories/word_repository.dart';
+import '../adapters/word_details_adapter.dart';
+
+class WordRepositoryImpl implements WordRepository {
+  final Client client;
+  WordRepositoryImpl({
+    required this.client,
+  });
+
+  @override
+  Future<Either<BaseException, WordDetailsEntity>> fetchWord(
+      String word) async {
+    try {
+      final response =
+          await client.get(RestClientRequest(path: "$baseUrl/$word"));
+      print(response);
+      if ((response.data as Map<String, dynamic>).containsKey('word') &&
+          (response.data as Map<String, dynamic>).containsKey('phonetics') &&
+          (response.data as Map<String, dynamic>).containsKey('meanings')) {
+        return Right(WordDetailsAdapter.fromMap(
+            response.data[0] as Map<String, dynamic>));
+      }
+      return Left(DefaultException(
+          message:
+              'Não foi encontranda nenhuma palavra para essa busca. Por favor, tente novamente.'));
+    } on BaseException catch (e) {
+      return Left(DefaultException(message: e.message));
+    } catch (e) {
+      print(e.toString());
+      return Left(DefaultException(message: e.toString()));
+    }
+  }
+}
