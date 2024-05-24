@@ -21,12 +21,15 @@ class WordRepositoryImpl implements WordRepository {
     try {
       final response =
           await client.get(RestClientRequest(path: "$baseUrl/$word"));
-      print(response);
-      if ((response.data as Map<String, dynamic>).containsKey('word') &&
-          (response.data as Map<String, dynamic>).containsKey('phonetics') &&
-          (response.data as Map<String, dynamic>).containsKey('meanings')) {
-        return Right(WordDetailsAdapter.fromMap(
-            response.data[0] as Map<String, dynamic>));
+
+      if ((response.data as List).isNotEmpty) {
+        if ((response.data[0] as Map<String, dynamic>).containsKey('word') &&
+            (response.data[0] as Map<String, dynamic>)
+                .containsKey('phonetics') &&
+            (response.data[0] as Map<String, dynamic>)
+                .containsKey('meanings')) {
+          return Right(WordDetailsAdapter.fromMap(response.data[0]));
+        }
       }
       return Left(DefaultException(
           message:
@@ -34,7 +37,6 @@ class WordRepositoryImpl implements WordRepository {
     } on BaseException catch (e) {
       return Left(DefaultException(message: e.message));
     } catch (e) {
-      print(e.toString());
       return Left(DefaultException(message: e.toString()));
     }
   }

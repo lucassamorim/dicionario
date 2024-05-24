@@ -1,5 +1,6 @@
 import 'package:dicionario/app/core/errors/default_exception.dart';
 import 'package:dicionario/app/features/single_word/domain/entities/word_details_entity.dart';
+import 'package:dicionario/app/features/single_word/presenter/widgets/player_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dicionario/app/injector.dart';
@@ -80,7 +81,24 @@ class _SingleWordPageState extends State<SingleWordPage> {
                     ),
                     Text(state.data.word)
                   ],
-                )
+                ),
+                ...state.data.phonetics.map((phonetic) => Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text('Text'),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(phonetic.text)
+                          ],
+                        ),
+                        if (phonetic.audio.isNotEmpty)
+                          PlayerWidget(
+                            url: phonetic.audio,
+                          )
+                      ],
+                    )),
               ],
             );
           }

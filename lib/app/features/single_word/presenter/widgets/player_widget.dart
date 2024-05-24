@@ -4,8 +4,10 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 class PlayerWidget extends StatefulWidget {
+  final String url;
   const PlayerWidget({
     super.key,
+    required this.url,
   });
 
   @override
@@ -39,8 +41,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     player = AudioPlayer();
     player.setReleaseMode(ReleaseMode.stop);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await player.setSource(UrlSource(
-          'https://api.dictionaryapi.dev/media/pronunciations/en/hello-au.mp3'));
+      await player.setSource(UrlSource(widget.url));
       _playerState = player.state;
       player.getDuration().then(
             (value) => setState(() {

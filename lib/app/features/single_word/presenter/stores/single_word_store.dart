@@ -14,11 +14,10 @@ class SingleWordStore extends ValueNotifier<BaseState> {
     value = LoadingState();
 
     final response = await repository.fetchWord(word);
-    print(response);
 
     response.fold(
       (l) => value = ErrorState(exception: l),
-      (r) => SuccessState<WordDetailsEntity>(data: r),
+      (r) => value = SuccessState<WordDetailsEntity>(data: r),
     );
   }
 }
