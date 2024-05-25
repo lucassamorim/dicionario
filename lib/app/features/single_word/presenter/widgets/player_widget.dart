@@ -76,60 +76,69 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).primaryColor;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              key: const Key('play_button'),
-              onPressed: _isPlaying ? null : _play,
-              iconSize: 48.0,
-              icon: const Icon(Icons.play_arrow),
-              color: color,
-            ),
-            IconButton(
-              key: const Key('pause_button'),
-              onPressed: _isPlaying ? _pause : null,
-              iconSize: 48.0,
-              icon: const Icon(Icons.pause),
-              color: color,
-            ),
-            IconButton(
-              key: const Key('stop_button'),
-              onPressed: _isPlaying || _isPaused ? _stop : null,
-              iconSize: 48.0,
-              icon: const Icon(Icons.stop),
-              color: color,
-            ),
-          ],
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 3,
+          color: Theme.of(context).colorScheme.primary,
         ),
-        Slider(
-          onChanged: (value) {
-            final duration = _duration;
-            if (duration == null) {
-              return;
-            }
-            final position = value * duration.inMilliseconds;
-            player.seek(Duration(milliseconds: position.round()));
-          },
-          value: (_position != null &&
-                  _duration != null &&
-                  _position!.inMilliseconds > 0 &&
-                  _position!.inMilliseconds < _duration!.inMilliseconds)
-              ? _position!.inMilliseconds / _duration!.inMilliseconds
-              : 0.0,
-        ),
-        Text(
-          _position != null
-              ? '$_positionText / $_durationText'
-              : _duration != null
-                  ? _durationText
-                  : '',
-          style: const TextStyle(fontSize: 16.0),
-        ),
-      ],
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                key: const Key('play_button'),
+                onPressed: _isPlaying ? null : _play,
+                iconSize: 30,
+                icon: const Icon(Icons.play_arrow),
+                color: color,
+              ),
+              IconButton(
+                key: const Key('pause_button'),
+                onPressed: _isPlaying ? _pause : null,
+                iconSize: 30,
+                icon: const Icon(Icons.pause),
+                color: color,
+              ),
+              IconButton(
+                key: const Key('stop_button'),
+                onPressed: _isPlaying || _isPaused ? _stop : null,
+                iconSize: 30,
+                icon: const Icon(Icons.stop),
+                color: color,
+              ),
+            ],
+          ),
+          Slider(
+            onChanged: (value) {
+              final duration = _duration;
+              if (duration == null) {
+                return;
+              }
+              final position = value * duration.inMilliseconds;
+              player.seek(Duration(milliseconds: position.round()));
+            },
+            value: (_position != null &&
+                    _duration != null &&
+                    _position!.inMilliseconds > 0 &&
+                    _position!.inMilliseconds < _duration!.inMilliseconds)
+                ? _position!.inMilliseconds / _duration!.inMilliseconds
+                : 0.0,
+          ),
+          Text(
+            _position != null
+                ? '$_positionText / $_durationText'
+                : _duration != null
+                    ? _durationText
+                    : '',
+            style: const TextStyle(fontSize: 16.0),
+          ),
+        ],
+      ),
     );
   }
 
