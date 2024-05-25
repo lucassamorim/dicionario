@@ -22,4 +22,12 @@ class MeaningAdapter {
           : [],
     );
   }
+
+  static Map<String, dynamic> toMap(MeaningEntity meaning) {
+    return {
+      'partOfSpeech': meaning.partOfSpeech,
+      'antonyms': meaning.antonyms.map((antonym) => antonym).toList(),
+      'synonyms': meaning.synonyms.map((synonyms) => synonyms).toList(),
+    };
+  }
 }

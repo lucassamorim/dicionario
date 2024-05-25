@@ -16,7 +16,7 @@ class Alerts {
 
   static void showFailure(BuildContext context, String message) {
     SnackBar snackBar = AlertWidget(
-      color: CustomColors.of(context).textSuccess,
+      color: Theme.of(context).colorScheme.error,
       backgroundColor: CustomColors.of(context).backgroundError,
       message: message,
     ).build(context);

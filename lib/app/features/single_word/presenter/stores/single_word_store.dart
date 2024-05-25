@@ -1,19 +1,19 @@
-import 'package:dicionario/app/features/single_word/domain/entities/word_details_entity.dart';
 import 'package:flutter/material.dart';
 
+import '../../data/usecases/fetch_work_usecase.dart';
+import '../../domain/entities/word_details_entity.dart';
 import '../../../../core/states/base_state.dart';
-import '../../domain/repositories/word_repository.dart';
 
 class SingleWordStore extends ValueNotifier<BaseState> {
-  final WordRepository repository;
+  final FetchWorkUsecase usecase;
   SingleWordStore({
-    required this.repository,
+    required this.usecase,
   }) : super(InitialState());
 
   Future fetchWork(String word) async {
     value = LoadingState();
 
-    final response = await repository.fetchWord(word);
+    final response = await usecase(word);
 
     response.fold(
       (l) => value = ErrorState(exception: l),

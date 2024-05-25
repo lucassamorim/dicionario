@@ -5,10 +5,15 @@ class PhoneticAdapter {
     return PhoneticEntity(
       audio: map['audio'] ?? '',
       text: map['text'] ?? '',
-      // licenseName: map['license']['name'] ?? '',
-      // licenceUrl: map['licence']['url'] ?? '',
-      licenseName: 'Teste licence name',
-      licenceUrl: 'Teste licence url',
+      licenseName: map['license'] != null ? map['license']['name'] : '',
+      licenceUrl: map['licence'] != null ? map['license']['url'] : '',
     );
+  }
+
+  static Map<String, dynamic> toMap(PhoneticEntity phonetic) {
+    return {
+      'audio': phonetic.audio,
+      'text': phonetic.text,
+    };
   }
 }

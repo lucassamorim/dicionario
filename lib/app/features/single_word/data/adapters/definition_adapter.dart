@@ -15,4 +15,12 @@ class DefinitionAdapter {
                 .toList()
             : []);
   }
+
+  static Map<String, dynamic> toMap(DefinitionEntity definition) {
+    return {
+      'definition': definition.definition,
+      'synonyms': definition.synonyms.map((synonyms) => synonyms).toList(),
+      'antonyms': definition.antonyms.map((antonyms) => antonyms).toList(),
+    };
+  }
 }

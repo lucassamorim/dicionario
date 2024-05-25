@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dicionario/app/injector.dart';
 
+import '../../../../desing_system/alert/alerts.dart';
 import '../../domain/entities/word_details_entity.dart';
 import '../widgets/player_widget.dart';
 import '../../../../core/states/base_state.dart';
@@ -24,7 +25,22 @@ class _SingleWordPageState extends State<SingleWordPage> {
   @override
   void initState() {
     store.fetchWork(widget.word);
+    store.addListener(listener);
     super.initState();
+  }
+
+  void listener() {
+    final state = store.value;
+    if (state is ErrorState) {
+      Alerts.showFailure(context, state.exception.message);
+      Navigator.pop(context);
+    }
+  }
+
+  @override
+  void dispose() {
+    store.removeListener(listener);
+    super.dispose();
   }
 
   @override
@@ -54,10 +70,6 @@ class _SingleWordPageState extends State<SingleWordPage> {
       body: ValueListenableBuilder(
         valueListenable: store,
         builder: (context, state, child) {
-          if (state is ErrorState) {
-            print(state.exception.message);
-          }
-          print(state);
           if (state is LoadingState) {
             return const Center(
               child: SizedBox(

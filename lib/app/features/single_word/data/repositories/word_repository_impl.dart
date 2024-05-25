@@ -35,6 +35,12 @@ class WordRepositoryImpl implements WordRepository {
           message:
               'Não foi encontranda nenhuma palavra para essa busca. Por favor, tente novamente.'));
     } on BaseException catch (e) {
+      if (e.data.containsKey('title') &&
+          e.data.containsKey('message') &&
+          e.data.containsKey('resolution')) {
+        return Left(DefaultException(
+            message: 'Por favor, insira uma palavra válida para a busca.'));
+      }
       return Left(DefaultException(message: e.message));
     } catch (e) {
       return Left(DefaultException(message: e.toString()));

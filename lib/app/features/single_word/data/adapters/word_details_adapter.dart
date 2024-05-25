@@ -18,4 +18,16 @@ class WordDetailsAdapter {
     return WordDetailsEntity(
         word: json['word'] ?? '', phonetics: phonetics, meanings: meanings);
   }
+
+  static Map<String, dynamic> toMap(WordDetailsEntity word) {
+    return {
+      'word': word.word,
+      'phonetics': word.phonetics
+          .map((phonetic) => PhoneticAdapter.toMap(phonetic))
+          .toList(),
+      'meanings': word.meanings
+          .map((meaning) => MeaningAdapter.toMap(meaning))
+          .toList(),
+    };
+  }
 }
