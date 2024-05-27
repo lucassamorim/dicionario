@@ -18,12 +18,7 @@ class FetchWordUsecase {
     final localResponse = await service.fetchWord(word);
 
     if (localResponse.isRight) {
-      print('Está passando por aqui');
       return localResponse;
-    }
-
-    if (localResponse.isLeft) {
-      print(localResponse.left.message);
     }
 
     final networkResponse = await repository.fetchWord(word);

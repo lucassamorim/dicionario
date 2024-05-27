@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:dicionario/app/core/errors/default_exception.dart';
-import 'package:dicionario/app/features/single_word/data/adapters/word_details_adapter.dart';
 import 'package:either_dart/either.dart';
 
 import '../../../../core/cache/cache.dart';
 import '../../../../core/errors/base_exception.dart';
+import '../../../../core/errors/default_exception.dart';
 import '../../domain/entities/word_details_entity.dart';
 import '../../domain/services/word_cache_service.dart';
+import '../adapters/word_details_adapter.dart';
 
 class WordCacheServiceImpl implements WordCacheService {
   final Cache cache;
@@ -18,45 +18,25 @@ class WordCacheServiceImpl implements WordCacheService {
   @override
   Future<Either<BaseException, WordDetailsEntity>> fetchWord(
       String word) async {
-    //try {
-    final response = await cache.get('words', 'name = ?', [word]);
+    try {
+      final response = await cache.get('words', 'name = ?', [word]);
 
-    // final responLocalTeste = await cache.get('words', '', []);
-    // print(responLocalTeste);
-
-    if (response.isNotEmpty) {
-      if (response[0].containsKey('name') &&
-          response[0].containsKey('script') &&
-          response[0].containsKey('favorite')) {
-        final Map<String, dynamic> wordMap = response[0];
-        print('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>');
-        //final convertMap = json.decode(response[0].toString());
-        //print(response[0]['script']);
-        //print(response[0]['script'].runtimeType);
-
-        print('Aqui vão os detalhes');
-        // final Map<String, dynamic> wordMap =
-        //     response[0]['script'] as Map<String, dynamic>;
-        //final wordMap = jsonDecode(response[0]['script'].toString());
-        // final Map<String, dynamic> scriptMap = jsonDecode(wordMap['script']);
-        // print(scriptMap);
-
-        print(wordMap['script']['word']);
-
-        //String script = response[0]['script'];
-
-        print('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>');
-        return Right(WordDetailsAdapter.fromMap(
-            response[0]['script'] as Map<String, dynamic>));
+      if (response.isNotEmpty) {
+        if (response[0].containsKey('name') &&
+            response[0].containsKey('script') &&
+            response[0].containsKey('favorite')) {
+          final Map<String, dynamic> wordMap = response[0];
+          return Right(
+              WordDetailsAdapter.fromMap(jsonDecode(wordMap['script'])));
+        }
       }
-    }
 
-    return Left(DefaultException(
-        message:
-            'Não foi encontrado nenhum resultado no cache para essa busca.'));
-    // } catch (e) {
-    //   return Left(DefaultException(message: e.toString()));
-    // }
+      return Left(DefaultException(
+          message:
+              'Não foi encontrado nenhum resultado no cache para essa busca.'));
+    } catch (e) {
+      return Left(DefaultException(message: e.toString()));
+    }
   }
 
   @override
@@ -66,7 +46,7 @@ class WordCacheServiceImpl implements WordCacheService {
       final response = await cache.insert('words', {
         'name': word.word,
         'favorite': 0,
-        'script': WordDetailsAdapter.toMap(word).toString()
+        'script': jsonEncode(WordDetailsAdapter.toMap(word))
       });
       if (response) return Right(word);
       return Left(DefaultException(
