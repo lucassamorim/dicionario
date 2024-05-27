@@ -1,7 +1,7 @@
 import 'package:auto_injector/auto_injector.dart';
 import 'package:dicionario/app/core/cache/sqflite_impl.dart';
 import 'package:dicionario/app/features/single_word/data/services/word_cache_service_impl.dart';
-import 'package:dicionario/app/features/single_word/data/usecases/fetch_work_usecase.dart';
+import 'package:dicionario/app/features/single_word/data/usecases/fetch_word_usecase.dart';
 import 'package:dio/dio.dart';
 
 import 'core/cache/cache.dart';
@@ -24,7 +24,7 @@ final injector = AutoInjector(
     injector.addSingleton(HomeStore.new);
     injector.add<WordRepository>(WordRepositoryImpl.new);
     injector.add<WordCacheService>(WordCacheServiceImpl.new);
-    injector.add(FetchWorkUsecase.new);
+    injector.add(FetchWordUsecase.new);
     injector.addSingleton(SingleWordStore.new);
     injector.commit();
   },

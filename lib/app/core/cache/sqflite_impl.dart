@@ -30,7 +30,7 @@ class SqfliteImpl implements Cache {
 
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE works (
+      CREATE TABLE words (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
         script TEXT,
@@ -42,7 +42,12 @@ class SqfliteImpl implements Cache {
   @override
   Future<List<Map<String, Object?>>> get(
       String key, String where, List<Object?> whereArgs) async {
+    //await removeDatabase();
     final db = await database;
+
+    final responseTeste = await db.query('words');
+    print(responseTeste);
+
     return await db.query(key, where: where, whereArgs: whereArgs);
   }
 
@@ -75,5 +80,10 @@ class SqfliteImpl implements Cache {
       whereArgs: whereArgs,
     );
     return true;
+  }
+
+  Future<void> removeDatabase() async {
+    String path = join(await getDatabasesPath(), 'dictionary.db');
+    await deleteDatabase(path);
   }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../data/usecases/fetch_work_usecase.dart';
+import '../../data/usecases/fetch_word_usecase.dart';
 import '../../domain/entities/word_details_entity.dart';
 import '../../../../core/states/base_state.dart';
 
 class SingleWordStore extends ValueNotifier<BaseState> {
-  final FetchWorkUsecase usecase;
+  final FetchWordUsecase usecase;
   SingleWordStore({
     required this.usecase,
   }) : super(InitialState());

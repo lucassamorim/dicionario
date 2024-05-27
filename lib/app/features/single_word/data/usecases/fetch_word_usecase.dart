@@ -6,10 +6,10 @@ import '../../domain/entities/word_details_entity.dart';
 import '../../domain/repositories/word_repository.dart';
 import '../../domain/services/word_cache_service.dart';
 
-class FetchWorkUsecase {
+class FetchWordUsecase {
   final WordRepository repository;
   final WordCacheService service;
-  FetchWorkUsecase({
+  FetchWordUsecase({
     required this.repository,
     required this.service,
   });
@@ -18,7 +18,12 @@ class FetchWorkUsecase {
     final localResponse = await service.fetchWord(word);
 
     if (localResponse.isRight) {
+      print('Está passando por aqui');
       return localResponse;
+    }
+
+    if (localResponse.isLeft) {
+      print(localResponse.left.message);
     }
 
     final networkResponse = await repository.fetchWord(word);

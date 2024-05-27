@@ -12,6 +12,11 @@ void main() {
     final response = WordDetailsAdapter.fromMap(word[0]);
     expect(response, isA<WordDetailsEntity>());
   });
+
+  test('Deve retornar o teste dos detalhes da palavra word', () {
+    final response = WordDetailsAdapter.fromMap(wordLocalTeste);
+    print(response);
+  });
 }
 
 const hello = [
@@ -325,3 +330,31 @@ const word = [
     ]
   }
 ];
+
+const wordLocalTeste = {
+  'word': 'word',
+  'phonetics': [
+    {
+      'audio': '',
+      'text': '/wɜːd/',
+    },
+    {
+      'audio':
+          'https://api.dictionaryapi.dev/media/pronunciations/en/word-us.mp3',
+      'text': '/wɝd/'
+    }
+  ],
+  'meanings': [
+    {
+      'partOfSpeech': 'noun',
+      'antonyms': [],
+      'synonyms': ['Bible, word of God, God, Logos, promise, vocable']
+    },
+    {
+      'partOfSpeech': 'verb',
+      'antonyms': [],
+      'synonyms': ['express, phrase, put into words, state']
+    },
+    {'partOfSpeech': 'interjection', 'antonyms': [], 'synonyms': []}
+  ]
+};
